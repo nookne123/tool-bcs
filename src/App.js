@@ -17,11 +17,11 @@ function App() {
 
 
   // สร้างสถานะแยกสำหรับแต่ละ checkbox
-  const [isKafkaConsumeChecked, setIsKafkaConsumeChecked] = useState(false);
-  const [isHTTPInteractiveChecked, setIsHTTPInteractiveChecked] = useState(false);
-  const [isHTTPUsageDetailChecked, setIsHTTPUsageDetailChecked] = useState(false);
-  const [isKafkaProduceChecked, setIsKafkaProduceChecked] = useState(false);
-  const [isSummaryLogChecked, setIsSummaryLogChecked] = useState(false);
+  const [isKafkaConsumeChecked, setIsKafkaConsumeChecked] = useState(true);
+  const [isHTTPInteractiveChecked, setIsHTTPInteractiveChecked] = useState(true);
+  const [isHTTPUsageDetailChecked, setIsHTTPUsageDetailChecked] = useState(true);
+  const [isKafkaProduceChecked, setIsKafkaProduceChecked] = useState(true);
+  const [isSummaryLogChecked, setIsSummaryLogChecked] = useState(true);
 
   const lines = inputLog.split('\n'); // แบ่ง inputLog เป็น array ของแต่ละบรรทัด
 
