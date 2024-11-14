@@ -120,7 +120,7 @@ function App() {
     <div className="text-center p-10 px-48">
       <div>
 
-        <div className="py-4 font-bold text-6xl text-yellow-400">Unpack message สุดเทพ ของน้อง เนเน่!</div>
+        <div className="py-4 font-bold text-6xl text-yellow-400">Unpack message สุดเทพ ของน้องเนเน่!</div>
         <div className="py-10 font-bold text-4xl text-pink-600 ">Input Text</div>
         <textarea
           type="text"
@@ -158,7 +158,7 @@ function App() {
         />
         <div className="text-red-500 text-2xl">Consume Msg</div>
       </label>
-      <div className={`${isKafkaConsumeChecked ? '' : 'hidden'} border rounded border-black p-4`}>
+      <div className={`${isKafkaConsumeChecked ? '' : 'hidden'} border rounded border-black p-4 bg-yellow-100`}>
         <textarea
           type="text"
           value={outputConsume}

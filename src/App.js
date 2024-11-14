@@ -158,7 +158,7 @@ function App() {
         />
         <div className="text-red-500 text-2xl">Consume Msg</div>
       </label>
-      <div className={`${isKafkaConsumeChecked ? '' : 'hidden'} border rounded border-black p-4`}>
+      <div className={`${isKafkaConsumeChecked ? '' : 'hidden'} border rounded border-black p-4 bg-yellow-100`}>
         <textarea
           type="text"
           value={outputConsume}
@@ -186,7 +186,7 @@ function App() {
         />
         <div className="text-red-500 text-2xl">Get Interactive Response</div>
       </label>
-      <div className={`${isHTTPInteractiveChecked ? '' : 'hidden'} border rounded border-black p-4`}>
+      <div className={`${isHTTPInteractiveChecked ? '' : 'hidden'} border rounded border-black p-4 bg-yellow-100`}>
         <textarea
           type="text"
           value={outPutGetInteractive}
@@ -214,7 +214,7 @@ function App() {
         />
         <div className="text-red-500 text-2xl">Get UsageDetail Response</div>
       </label>
-      <div className={`${isHTTPUsageDetailChecked ? '' : 'hidden'} border rounded border-black p-4`}>
+      <div className={`${isHTTPUsageDetailChecked ? '' : 'hidden'} border rounded border-black p-4 bg-yellow-100`}>
         <textarea
           type="text"
           value={outPutGetUsageDetail}
@@ -242,7 +242,7 @@ function App() {
         />
         <div className="text-red-500 text-2xl">Produce Msg</div>
       </label>
-      <div className={`${isKafkaProduceChecked ? '' : 'hidden'} border rounded border-black p-4`}>
+      <div className={`${isKafkaProduceChecked ? '' : 'hidden'} border rounded border-black p-4 bg-yellow-100`}>
         <textarea
           type="text"
           value={outputProduce}
@@ -270,7 +270,7 @@ function App() {
         />
         <div className="text-red-500 text-2xl">Summary Log</div>
       </label>
-      <div className={`${isSummaryLogChecked ? '' : 'hidden'} border rounded border-black p-4`}>
+      <div className={`${isSummaryLogChecked ? '' : 'hidden'} border rounded border-black p-4 bg-yellow-100`}>
         <textarea
           type="text"
           value={outputSummaryLog}
