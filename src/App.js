@@ -17,11 +17,11 @@ function App() {
 
 
   // สร้างสถานะแยกสำหรับแต่ละ checkbox
-  const [isKafkaConsumeChecked, setIsKafkaConsumeChecked] = useState(true);
-  const [isHTTPInteractiveChecked, setIsHTTPInteractiveChecked] = useState(true);
-  const [isHTTPUsageDetailChecked, setIsHTTPUsageDetailChecked] = useState(true);
-  const [isKafkaProduceChecked, setIsKafkaProduceChecked] = useState(true);
-  const [isSummaryLogChecked, setIsSummaryLogChecked] = useState(true);
+  const [isKafkaConsumeChecked, setIsKafkaConsumeChecked] = useState(false);
+  const [isHTTPInteractiveChecked, setIsHTTPInteractiveChecked] = useState(false);
+  const [isHTTPUsageDetailChecked, setIsHTTPUsageDetailChecked] = useState(false);
+  const [isKafkaProduceChecked, setIsKafkaProduceChecked] = useState(false);
+  const [isSummaryLogChecked, setIsSummaryLogChecked] = useState(false);
 
   const lines = inputLog.split('\n'); // แบ่ง inputLog เป็น array ของแต่ละบรรทัด
 
@@ -29,11 +29,28 @@ function App() {
     let AllOutput = '';
     let MessageOutput = '';
 
+    setOutPutGetInteractive('');
+    setOutPutGetUsageDetail('');
+    setOutPutGetInteractiveMsg('');
+    setOutPutGetUsageDetailMsg('');
+    setOutputConsume('');
+    setOutputConsumeMsg('');
+    setOutputProduce('');
+    setOutputProduceMsg('');
+    setOutputSummaryLog('');
+    setOutputSummaryLogMsg('');
+
+    setIsKafkaConsumeChecked(false);
+    setIsHTTPInteractiveChecked(false);
+    setIsHTTPUsageDetailChecked(false);
+    setIsKafkaProduceChecked(false);
+    setIsSummaryLogChecked(false);
 
     lines.forEach(line => {
       try {
         const log = JSON.parse(line); // แปลงบรรทัดเป็น JSON
         if (log.actionDescription && log.actionDescription.includes('receive http response from getInteractiveBillDet')) {
+          setIsHTTPInteractiveChecked(true)
           if (log.message === "" || log.message === null) {
             setOutPutGetInteractiveMsg('ไม่มีค่า');
           } else {
@@ -43,6 +60,7 @@ function App() {
           setOutPutGetInteractive(formatJSON(log) + '\n')
         }
         if (log.actionDescription && log.actionDescription.includes('receive http response from GetUsageDeTail')) {
+          setIsHTTPUsageDetailChecked(true)
           if (log.message === "" || log.message === null) {
             setOutPutGetUsageDetailMsg('ไม่มีค่า');
           } else {
@@ -52,23 +70,19 @@ function App() {
           setOutPutGetUsageDetail(formatJSON(log) + '\n')
         }
         if (log.action && log.action.includes('[CONSUMING]')) {
+          setIsKafkaConsumeChecked(true)
           setOutputConsumeMsg(formatJSON(JSON.parse(log.message.replace(/\\/g, ""))) + '\n'); // แปลงให้อยู่ในรูป JSON format
           log.message = 'ดูค่าข้างล่างจ้าาาา';
           setOutputConsume(formatJSON(log) + '\n')// ลบ backslashes
         }
         if (log.action && log.action.includes('[PRODUCING]')) {
-          setOutputProduceMsg(formatJSON(JSON.parse(log.message.replace(/\\/g, ""))) + '\n'); // แปลงให้อยู่ในรูป JSON format
-          log.message = 'ดูค่าข้างล่างจ้าาาา';
-          setOutputProduce(formatJSON(log) + '\n')// ลบ backslashes
-        }
-        if (log.action && log.action.includes('[PRODUCING]')) {
+          setIsKafkaProduceChecked(true)
           setOutputProduceMsg(formatJSON(JSON.parse(log.message.replace(/\\/g, ""))) + '\n'); // แปลงให้อยู่ในรูป JSON format
           log.message = 'ดูค่าข้างล่างจ้าาาา';
           setOutputProduce(formatJSON(log) + '\n')// ลบ backslashes
         }
         if (log.recordType && log.recordType.includes('summary')) {
-          // setOutputSummaryLogMsg(formatJSON(JSON.parse(log.message.replace(/\\/g, ""))) + '\n'); // แปลงให้อยู่ในรูป JSON format
-          // log.message = 'ดูค่าข้างล่างจ้าาาา';
+          setIsSummaryLogChecked(true)
           setOutputSummaryLog(formatJSON(log) + '\n')// ลบ backslashes
         }
       } catch (error) {
@@ -89,6 +103,13 @@ function App() {
     setOutputProduceMsg('');
     setOutputSummaryLog('');
     setOutputSummaryLogMsg('');
+
+    setIsKafkaConsumeChecked(false);
+    setIsHTTPInteractiveChecked(false);
+    setIsHTTPUsageDetailChecked(false);
+    setIsKafkaProduceChecked(false);
+    setIsSummaryLogChecked(false);
+
   };
 
   const formatJSON = (jsonObj) => {
@@ -99,8 +120,8 @@ function App() {
     <div className="text-center p-10 px-48">
       <div>
 
-        <div className="py-4 font-bold text-6xl text-black">Unpack message</div>
-        <div className="py-10 font-bold text-4xl text-yellow-300">Input Text</div>
+        <div className="py-4 font-bold text-6xl text-yellow-400">Unpack message สุดเทพ ของน้องเนเน่!</div>
+        <div className="py-10 font-bold text-4xl text-pink-600 ">Input Text</div>
         <textarea
           type="text"
           value={inputLog}
@@ -130,11 +151,12 @@ function App() {
 
       <label className="flex gap-2 text-xl text-black font-bold my-4">
         <input
+          className="w-5"
           type="checkbox"
           checked={isKafkaConsumeChecked}
           onChange={(e) => setIsKafkaConsumeChecked(e.target.checked)}
         />
-        <div className="text-red-500">Consume Msg</div>
+        <div className="text-red-500 text-2xl">Consume Msg</div>
       </label>
       <div className={`${isKafkaConsumeChecked ? '' : 'hidden'} border rounded border-black p-4`}>
         <textarea
@@ -157,11 +179,12 @@ function App() {
 
       <label className="flex gap-2 text-xl text-black font-bold my-4">
         <input
+          className="w-5"
           type="checkbox"
           checked={isHTTPInteractiveChecked}
           onChange={(e) => setIsHTTPInteractiveChecked(e.target.checked)}
         />
-        <div className="text-red-500">Get Interactive Response</div>
+        <div className="text-red-500 text-2xl">Get Interactive Response</div>
       </label>
       <div className={`${isHTTPInteractiveChecked ? '' : 'hidden'} border rounded border-black p-4`}>
         <textarea
@@ -184,11 +207,12 @@ function App() {
 
       <label className="flex gap-2 text-xl text-black font-bold my-4">
         <input
+          className="w-5"
           type="checkbox"
           checked={isHTTPUsageDetailChecked}
           onChange={(e) => setIsHTTPUsageDetailChecked(e.target.checked)}
         />
-        <div className="text-red-500">Get UsageDetail Response</div>
+        <div className="text-red-500 text-2xl">Get UsageDetail Response</div>
       </label>
       <div className={`${isHTTPUsageDetailChecked ? '' : 'hidden'} border rounded border-black p-4`}>
         <textarea
@@ -211,11 +235,12 @@ function App() {
 
       <label className="flex gap-2 text-xl text-black font-bold my-4">
         <input
+          className="w-5"
           type="checkbox"
           checked={isKafkaProduceChecked}
           onChange={(e) => setIsKafkaProduceChecked(e.target.checked)}
         />
-        <div className="text-red-500">Produce Msg</div>
+        <div className="text-red-500 text-2xl">Produce Msg</div>
       </label>
       <div className={`${isKafkaProduceChecked ? '' : 'hidden'} border rounded border-black p-4`}>
         <textarea
@@ -238,11 +263,12 @@ function App() {
 
       <label className="flex gap-2 text-xl text-black font-bold my-4">
         <input
+          className="w-5"
           type="checkbox"
           checked={isSummaryLogChecked}
           onChange={(e) => setIsSummaryLogChecked(e.target.checked)}
         />
-        <div className="text-red-500">Summary Log</div>
+        <div className="text-red-500 text-2xl">Summary Log</div>
       </label>
       <div className={`${isSummaryLogChecked ? '' : 'hidden'} border rounded border-black p-4`}>
         <textarea
