@@ -83,12 +83,6 @@ function App() {
     setOutPutGetUsageDetail('');
     setOutPutGetInteractiveMsg('');
     setOutPutGetUsageDetailMsg('');
-    setOutputConsume('');
-    setOutputConsumeMsg('');
-    setOutputProduce('');
-    setOutputProduceMsg('');
-    setOutputSummaryLog('');
-    setOutputSummaryLogMsg('');
   };
 
   const formatJSON = (jsonObj) => {
