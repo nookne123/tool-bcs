@@ -23,12 +23,12 @@ function App() {
   const [isKafkaProduceChecked, setIsKafkaProduceChecked] = useState(false);
   const [isSummaryLogChecked, setIsSummaryLogChecked] = useState(false);
 
+  const [outputGetUsageDetailList, setOutputGetUsageDetailList] = useState([]);
+
   const lines = inputLog.split('\n'); // แบ่ง inputLog เป็น array ของแต่ละบรรทัด
 
   const handleConvert = () => {
-    let AllOutput = '';
-    let MessageOutput = '';
-
+    let usageDetailList = [];
     setOutPutGetInteractive('');
     setOutPutGetUsageDetail('');
     setOutPutGetInteractiveMsg('');
@@ -61,13 +61,17 @@ function App() {
         }
         if (log.actionDescription && log.actionDescription.includes('receive http response from GetUsageDeTail')) {
           setIsHTTPUsageDetailChecked(true)
+          let buildGetUsageDetail = {};
           if (log.message === "" || log.message === null) {
-            setOutPutGetUsageDetailMsg('ไม่มีค่า');
+            // setOutPutGetUsageDetailMsg('ไม่มีค่า');
+            buildGetUsageDetail.message = 'ไม่มีค่า';
           } else {
-            setOutPutGetUsageDetailMsg(log.message);
+            // setOutPutGetUsageDetailMsg(log.message);
+            buildGetUsageDetail.message = log.message
           }
           log.message = 'ดูค่าข้างล่างจ้าาาา';
-          setOutPutGetUsageDetail(formatJSON(log) + '\n')
+          buildGetUsageDetail.log = formatJSON(log) + '\n';
+          usageDetailList.push(buildGetUsageDetail);
         }
         if (log.action && log.action.includes('[CONSUMING]')) {
           setIsKafkaConsumeChecked(true)
@@ -85,6 +89,8 @@ function App() {
           setIsSummaryLogChecked(true)
           setOutputSummaryLog(formatJSON(log) + '\n')// ลบ backslashes
         }
+
+        setOutputGetUsageDetailList(usageDetailList)
       } catch (error) {
         console.error('Error parsing line:', line);
       }
@@ -103,6 +109,7 @@ function App() {
     setOutputProduceMsg('');
     setOutputSummaryLog('');
     setOutputSummaryLogMsg('');
+    setOutputGetUsageDetailList([])
 
     setIsKafkaConsumeChecked(false);
     setIsHTTPInteractiveChecked(false);
@@ -158,7 +165,11 @@ function App() {
         />
         <div className="text-red-500 text-2xl">Consume Msg</div>
       </label>
-      <div className={`${isKafkaConsumeChecked ? '' : 'hidden'} border rounded border-black p-4 bg-yellow-100`}>
+      <div className={`${isKafkaConsumeChecked && outputConsume === '' ? '' : 'hidden'} text-start text-yellow-300`}>
+        ไม่พบข้อมูล Consume Msg
+      </div>
+      <div
+        className={`${isKafkaConsumeChecked && outputConsume !== '' ? '' : 'hidden'} border rounded border-black p-4 bg-yellow-100`}>
         <textarea
           type="text"
           value={outputConsume}
@@ -186,7 +197,12 @@ function App() {
         />
         <div className="text-red-500 text-2xl">Get Interactive Response</div>
       </label>
-      <div className={`${isHTTPInteractiveChecked ? '' : 'hidden'} border rounded border-black p-4 bg-yellow-100`}>
+      <div
+        className={`${isHTTPInteractiveChecked && outPutGetInteractive === '' ? '' : 'hidden'} text-start text-yellow-300`}>
+        ไม่พบข้อมูล Get Interactive Response
+      </div>
+      <div
+        className={`${isHTTPInteractiveChecked && outPutGetInteractive !== '' ? '' : 'hidden'} border rounded border-black p-4 bg-yellow-100`}>
         <textarea
           type="text"
           value={outPutGetInteractive}
@@ -214,20 +230,52 @@ function App() {
         />
         <div className="text-red-500 text-2xl">Get UsageDetail Response</div>
       </label>
-      <div className={`${isHTTPUsageDetailChecked ? '' : 'hidden'} border rounded border-black p-4 bg-yellow-100`}>
-        <textarea
-          type="text"
-          value={outPutGetUsageDetail}
-          readOnly
-          className="border rounded border-black p-2 w-full h-[300px]"
-        />
-        <div className="font-bold text-xl text-black text-start py-4">message in xml Get UsageDetail</div>
-        <textarea
-          className="w-full h-[500px]"
-          value={outPutGetUsageDetailMsg}
-          readOnly
-        />
+      <div
+        className={`${isHTTPUsageDetailChecked && outputGetUsageDetailList.length === 0 ? '' : 'hidden'} text-start text-yellow-300`}>
+        ไม่พบข้อมูล Get UsageDetail Response
       </div>
+      {outputGetUsageDetailList.map((item, index) => (
+        <div
+          className={`${isHTTPUsageDetailChecked && outputGetUsageDetailList.length !== 0 ? '' : 'hidden'} border rounded border-black p-4 bg-yellow-100`}>
+          <div className="text-start font-bold">response: {index + 1}</div>
+          <textarea
+            type="text"
+            value={item.log}
+            readOnly
+            className="border rounded border-black p-2 w-full h-[300px]"
+          />
+          <div className="font-bold text-xl text-black text-start py-4">message in xml Get UsageDetail</div>
+          <textarea
+            className="w-full h-[500px]"
+            value={item.message}
+            readOnly
+          />
+        </div>
+      ))}
+
+      {/*<label className="flex gap-2 text-xl text-black font-bold my-4">*/}
+      {/*  <input*/}
+      {/*    className="w-5"*/}
+      {/*    type="checkbox"*/}
+      {/*    checked={isHTTPUsageDetailChecked}*/}
+      {/*    onChange={(e) => setIsHTTPUsageDetailChecked(e.target.checked)}*/}
+      {/*  />*/}
+      {/*  <div className="text-red-500 text-2xl">Get UsageDetail Response</div>*/}
+      {/*</label>*/}
+      {/*<div className={`${isHTTPUsageDetailChecked ? '' : 'hidden'} border rounded border-black p-4 bg-yellow-100`}>*/}
+      {/*  <textarea*/}
+      {/*    type="text"*/}
+      {/*    value={outPutGetUsageDetail}*/}
+      {/*    readOnly*/}
+      {/*    className="border rounded border-black p-2 w-full h-[300px]"*/}
+      {/*  />*/}
+      {/*  <div className="font-bold text-xl text-black text-start py-4">message in xml Get UsageDetail</div>*/}
+      {/*  <textarea*/}
+      {/*    className="w-full h-[500px]"*/}
+      {/*    value={outPutGetUsageDetailMsg}*/}
+      {/*    readOnly*/}
+      {/*  />*/}
+      {/*</div>*/}
 
       {/*---------------------------------------------------------------------------------------------*/}
       {/*------------------------------       Kafka Produce        -----------------------------------*/}
@@ -242,7 +290,12 @@ function App() {
         />
         <div className="text-red-500 text-2xl">Produce Msg</div>
       </label>
-      <div className={`${isKafkaProduceChecked ? '' : 'hidden'} border rounded border-black p-4 bg-yellow-100`}>
+      <div
+        className={`${isKafkaProduceChecked && outputProduce === '' ? '' : 'hidden'} text-start text-yellow-300`}>
+        ไม่พบข้อมูล Produce Msg
+      </div>
+      <div
+        className={`${isKafkaProduceChecked && outputProduce !== '' ? '' : 'hidden'} border rounded border-black p-4 bg-yellow-100`}>
         <textarea
           type="text"
           value={outputProduce}
@@ -270,7 +323,12 @@ function App() {
         />
         <div className="text-red-500 text-2xl">Summary Log</div>
       </label>
-      <div className={`${isSummaryLogChecked ? '' : 'hidden'} border rounded border-black p-4 bg-yellow-100`}>
+      <div
+        className={`${isSummaryLogChecked && outputSummaryLog === '' ? '' : 'hidden'} text-start text-yellow-300`}>
+        ไม่พบข้อมูล Summary Log
+      </div>
+      <div
+        className={`${isSummaryLogChecked && outputSummaryLog !== '' ? '' : 'hidden'} border rounded border-black p-4 bg-yellow-100`}>
         <textarea
           type="text"
           value={outputSummaryLog}
