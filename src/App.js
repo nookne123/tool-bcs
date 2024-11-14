@@ -25,7 +25,7 @@ function App() {
             log.message = 'ไม่มีค่า';
           } else {
             interactiveOutputMsg = log.message;
-            log.message = 'ดูค่าข้างล่างนะจ๊ะ';
+            log.message = 'ไม่มีค่า';
           }
           interactiveOutput += formatJSON(log) + '\n'; // แสดงผลลัพธ์
         }
@@ -33,8 +33,9 @@ function App() {
           usageDetailOutputMsg = log.message;
           if (log.message === "" || log.message === null) {
             log.message = 'ไม่มีค่า';
+            usageDetailOutputMsg = 'ไม่มีค่า';
           } else {
-            interactiveOutputMsg = log.message;
+            usageDetailOutputMsg = log.message;
             log.message = 'ดูค่าข้างล่างนะจ๊ะ';
           }
           usageDetailOutput += formatJSON(log) + '\n'; // แสดงผลลัพธ์
