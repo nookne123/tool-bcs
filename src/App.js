@@ -56,7 +56,7 @@ function App() {
           } else {
             setOutPutGetInteractiveMsg(log.message);
           }
-          log.message = 'ดูค่าข้างล่างจ้าาาา';
+          // log.message = 'ดูค่าข้างล่างจ้าาาา';
           setOutPutGetInteractive(formatJSON(log) + '\n')
         }
         if (log.actionDescription && log.actionDescription.includes('receive http response from GetUsageDeTail')) {
@@ -69,20 +69,18 @@ function App() {
             // setOutPutGetUsageDetailMsg(log.message);
             buildGetUsageDetail.message = log.message
           }
-          log.message = 'ดูค่าข้างล่างจ้าาาา';
+          // log.message = 'ดูค่าข้างล่างจ้าาาา';
           buildGetUsageDetail.log = formatJSON(log) + '\n';
           usageDetailList.push(buildGetUsageDetail);
         }
         if (log.action && log.action.includes('[CONSUMING]')) {
           setIsKafkaConsumeChecked(true)
           setOutputConsumeMsg(formatJSON(JSON.parse(log.message.replace(/\\/g, ""))) + '\n'); // แปลงให้อยู่ในรูป JSON format
-          log.message = 'ดูค่าข้างล่างจ้าาาา';
           setOutputConsume(formatJSON(log) + '\n')// ลบ backslashes
         }
         if (log.action && log.action.includes('[PRODUCING]')) {
           setIsKafkaProduceChecked(true)
           setOutputProduceMsg(formatJSON(JSON.parse(log.message.replace(/\\/g, ""))) + '\n'); // แปลงให้อยู่ในรูป JSON format
-          log.message = 'ดูค่าข้างล่างจ้าาาา';
           setOutputProduce(formatJSON(log) + '\n')// ลบ backslashes
         }
         if (log.recordType && log.recordType.includes('summary')) {
