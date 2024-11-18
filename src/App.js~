@@ -78,7 +78,7 @@ function App() {
           setOutputConsumeMsg(formatJSON(JSON.parse(log.message.replace(/\\/g, ""))) + '\n'); // แปลงให้อยู่ในรูป JSON format
           setOutputConsume(formatJSON(log) + '\n')// ลบ backslashes
         }
-        if (log.action && log.action.includes('[PRODUCED]')) {
+        if (log.action && log.action.includes('[PRODUCING]')) {
           setIsKafkaProduceChecked(true)
           setOutputProduceMsg(formatJSON(JSON.parse(log.message.replace(/\\/g, ""))) + '\n'); // แปลงให้อยู่ในรูป JSON format
           setOutputProduce(formatJSON(log) + '\n')// ลบ backslashes
