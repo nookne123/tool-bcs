@@ -56,7 +56,7 @@ function App() {
     lines.forEach(line => {
       try {
         const log = JSON.parse(line); // แปลงบรรทัดเป็น JSON
-        if (log.actionDescription && log.actionDescription.includes('receive http response from getInteractive')) {
+        if (log.actionDescription && log.actionDescription.includes('receive http response from getInteractiveBillDet')) {
           setIsHTTPInteractiveChecked(true)
           if (log.message === "" || log.message === null) {
             setOutPutGetInteractiveMsg('ไม่มีค่า');
